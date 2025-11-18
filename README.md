@@ -1,5 +1,6 @@
+## Using a 'helper' image to avoid polluting the final image 
+
 ```bash
-####### Using a 'helper' image to avoid polluting the final image #######
 FROM registry.redhat.io/rhel10/rhel-bootc:latest as builder
 RUN dnf install -y ansible-core 
 RUN mkdir -p /root/ansible
@@ -17,9 +18,11 @@ RUN --mount=type=bind,from=builder,source=/usr/lib/python3.12/site-packages,targ
     --mount=type=bind,from=builder,source=/usr/lib64/python3.12/site-packages,target=/usr/lib64/python3.12/site-packages,ro \
     --mount=type=bind,from=builder,source=/root/ansible,target=/root/ansible,ro \
     /root/ansible/ansible-playbook /root/ansible/playbook.yml
+```
 
-####### Direct method, needs cleanup after running the automation #######
+## Direct method, needs cleanup after running the automation 
 
+```bash
 FROM registry.redhat.io/rhel10/rhel-bootc:latest as builder
 RUN dnf install -y ansible-core 
 RUN mkdir -p /root/ansible
